@@ -162,6 +162,3 @@ cython_debug/
 
 # VsCode
 .vscode/
-
-input/
-output/
