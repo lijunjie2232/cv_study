@@ -12,9 +12,13 @@ def showImage(text, img: cv.Mat, sec=0, key=None, cvt=True):
     else:
         cv.waitKey(sec)
         cv.destroyAllWindows()
+    return 0
         
 def saveImage(fileName, img:cv.Mat, cvt=True):
     if cvt:
         cv.imwrite(fileName, cv.cvtColor(img, cv.COLOR_RGB2BGR))
     else:
         cv.imwrite(fileName, img)
+        
+def readImage(imgPath:str):
+    return cv.cvtColor(cv.imread(imgPath), cv.COLOR_BGR2RGB)
