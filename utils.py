@@ -1,7 +1,9 @@
 import cv2 as cv
 import numpy as np
+import matplotlib.pyplot as plt
+import os
 
-def showImage(text, img: cv.Mat, sec=0, key=None, cvt=True):
+def showImage_cv(text, img: cv.Mat, sec=0, key='q', cvt=True):
     if cvt:
         cv.imshow("", cv.cvtColor(img, cv.COLOR_RGB2BGR))
     else:
@@ -14,11 +16,31 @@ def showImage(text, img: cv.Mat, sec=0, key=None, cvt=True):
         cv.destroyAllWindows()
     return 0
         
-def saveImage(fileName, img:cv.Mat, cvt=True):
+def saveImage_cv(fileName, img:cv.Mat, cvt=True):
     if cvt:
         cv.imwrite(fileName, cv.cvtColor(img, cv.COLOR_RGB2BGR))
     else:
         cv.imwrite(fileName, img)
         
-def readImage(imgPath:str):
+def readImage_cv(imgPath:str):
     return cv.cvtColor(cv.imread(imgPath), cv.COLOR_BGR2RGB)
+
+def showImage(pic, axis=True, figsize=(5,5)):
+    plt.figure(figsize=figsize)
+    plt.imshow(pic)
+    plt.axis(axis)
+    plt.show()
+    
+def readImage(url:str):
+    if not os.path.isfile(url):
+        raise(Exception("input must exist and should be file url instead of director"))
+    image = cv.imread(url)
+    image = cv.cvtColor(image, cv.COLOR_BGR2RGB)
+    return image
+
+def saveImage(image:np.array, url:str):
+    dir = os.path.dirname(url)
+    if not os.path.isdir(dir):
+        os.makedirs(dir)
+    image = cv.cvtColor(image, cv.COLOR_RGB2BGR)
+    cv.imwrite(url, image)
