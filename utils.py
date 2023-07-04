@@ -38,9 +38,10 @@ def readImage(url:str):
     image = cv.cvtColor(image, cv.COLOR_BGR2RGB)
     return image
 
-def saveImage(image:np.array, url:str):
+def saveImage(image:np.array, url:str, cvt=True):
     dir = os.path.dirname(url)
     if not os.path.isdir(dir):
         os.makedirs(dir)
-    image = cv.cvtColor(image, cv.COLOR_RGB2BGR)
+    if cvt:
+        image = cv.cvtColor(image, cv.COLOR_RGB2BGR)
     cv.imwrite(url, image)
