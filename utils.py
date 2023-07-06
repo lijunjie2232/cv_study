@@ -25,9 +25,9 @@ def saveImage_cv(fileName, img:cv.Mat, cvt=True):
 def readImage_cv(imgPath:str):
     return cv.cvtColor(cv.imread(imgPath), cv.COLOR_BGR2RGB)
 
-def showImage(pic, title=None, axis=True, figsize=(5,5)):
+def showImage(pic, title=None, axis=True, figsize=(5,5), cmap=None):
     plt.figure(figsize=figsize)
-    plt.imshow(pic)
+    plt.imshow(pic, cmap=cmap)
     plt.axis(axis)
     if title:
         plt.title(title)
