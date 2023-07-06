@@ -3,11 +3,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 
-def showImage_cv(text, img: cv.Mat, sec=0, key='q', cvt=True):
+def showImage_cv(img: cv.Mat, text="", sec=0, key='q', cvt=True):
     if cvt:
-        cv.imshow("", cv.cvtColor(img, cv.COLOR_RGB2BGR))
+        cv.imshow(text, cv.cvtColor(img, cv.COLOR_RGB2BGR))
     else:
-        cv.imshow("", img)
+        cv.imshow(text, img)
     if key:
         if cv.waitKey(sec) == ord(key):
             cv.destroyAllWindows()
