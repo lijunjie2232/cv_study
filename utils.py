@@ -47,3 +47,22 @@ def saveImage(image:np.array, url:str, cvt=True):
     if cvt:
         image = cv.cvtColor(image, cv.COLOR_RGB2BGR)
     cv.imwrite(url, image)
+
+# xyxy2xywh and xywh2xyxy there are diff from yolo
+#bbox(x1,y1,x2,y2)->bbox(x, y, w, h)
+def xyxy2xywh(x:np.array):
+    y = np.zeros_like(x)
+    y[:, 0] = x[:, 0]
+    y[:, 1] = x[:, 1]
+    y[:, 2] = x[:, 2] - x[:, 0]
+    y[:, 3] = x[:, 3] - x[:, 1]
+    return y
+
+#bbox(x, y, w, h)->bbox(x1,y1,x2,y2)
+def xywh2xyxy(x:np.array):
+    y = np.zeros_like(x)
+    y[:, 0] = x[:, 0]
+    y[:, 1] = x[:, 1]
+    y[:, 2] = x[:, 0] + x[:, 2]
+    y[:, 3] = x[:, 1] + x[:, 3]
+    return y
