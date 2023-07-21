@@ -5,6 +5,9 @@ def draw_circle(event, x, y, flags, params, **args):
         cv.circle(img, (x, y), 7, (253, 121, 168), -1)
 
 class CaptureUtils:
+    '''
+    mode: 0-points 1-rectangle
+    '''
     originalImage = None
     x_0 = 0
     x_1 = 0
