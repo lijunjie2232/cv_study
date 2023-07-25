@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 
-def showImage_cv(img: cv.Mat, text="", sec=0, key='q', cvt=True):
+def showImage_cv(img: cv.Mat, text="", sec=-1, key='q', cvt=True):
     if cvt:
         cv.imshow(text, cv.cvtColor(img, cv.COLOR_RGB2BGR))
     else:
@@ -25,7 +25,9 @@ def saveImage_cv(fileName, img:cv.Mat, cvt=True):
 def readImage_cv(imgPath:str):
     return cv.cvtColor(cv.imread(imgPath), cv.COLOR_BGR2RGB)
 
-def showImage(pic, title=None, axis=True, figsize=(5,5), cmap=None):
+def showImage(pic, title=None, axis=True, figsize=(5,5), cmap=None, cvt=False):
+    if cvt:
+        pic = cv.cvtColor(pic.copy(), cv.COLOR_RGB2BGR)
     plt.figure(figsize=figsize)
     plt.imshow(pic, cmap=cmap)
     plt.axis(axis)
