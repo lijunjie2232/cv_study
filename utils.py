@@ -68,3 +68,27 @@ def xywh2xyxy(x:np.array):
     y[:, 2] = x[:, 0] + x[:, 2]
     y[:, 3] = x[:, 1] + x[:, 3]
     return y
+
+def get_mean_std(dataset, type='train'):
+    """
+    计算数据集的均值和标准差
+    :param type: 使用的是那个数据集的数据，有'train', 'test', 'testing'
+    :return means: 均值
+    :return stdevs: 标准差
+    """
+    num_imgs = len(dataset[type])
+    for data in dataset[type]:
+        img = data[0]
+        for i in range(3):
+            # 一个通道的均值和标准差
+            means[i] += img[i, :, :].mean()
+            stdevs[i] += img[i, :, :].std()
+
+
+    means = np.asarray(means) / num_imgs
+    stdevs = np.asarray(stdevs) / num_imgs
+
+    print("{} : normMean = {}".format(type, means))
+    print("{} : normstdevs = {}".format(type, stdevs))
+    
+    return means, stdevs

@@ -1,3 +1,4 @@
+from typing import Any
 from utils import *
 
 def draw_circle(event, x, y, flags, params, **args):
@@ -6,7 +7,8 @@ def draw_circle(event, x, y, flags, params, **args):
 
 class CaptureUtils:
     '''
-    mode: 0-points 1-rectangle
+    @params img: img to be show
+    @params mode: 0-points 1-rectangle
     '''
     originalImage = None
     x_0 = 0
@@ -56,7 +58,15 @@ class CaptureUtils:
                     self.img = self.img_0.copy()
                 else:
                     self.img_0 = self.img
-                    self.collection.append(((self.x_0, self.y_0), (self.x_1, self.y_1)))
+                    box = self.formBox(((self.x_0, self.y_0), (self.x_1, self.y_1)))
+                    self.collection.append(box)
+                    
+    def formBox(self, box):
+        x = np.array((box[0][0], box[1][0]))
+        y = np.array((box[0][1], box[1][1]))
+        x.sort()
+        y.sort()
+        return ((x[0], y[0]), (x[1], y[1]))
 
     def startCapture(self, key='q'):
         self.collection = []
@@ -68,6 +78,9 @@ class CaptureUtils:
                 break
         cv.destroyAllWindows()
         return self.collection
+    
+    def __call__(self,  key='q'):
+        return self.startCapture(key)
 
 if __name__ == '__main__':
     # img = np.ones((500, 500, 3), np.uint8)*255
