@@ -8,7 +8,10 @@ def draw_circle(event, x, y, flags, params, **args):
 class CaptureUtils:
     '''
     @params img: img to be show
-    @params mode: 0-points 1-rectangle
+    @params mode:  
+                    0-points
+                    1-rectangle
+                    2-line
     '''
     originalImage = None
     x_0 = 0
@@ -38,29 +41,46 @@ class CaptureUtils:
                 if (x, y) not in self.collection:
                     self.collection.append((x, y))
         elif event == cv.EVENT_MOUSEMOVE:
-            if self.click_down_ed and self.mode == 1:
-                self.x_1 = x
-                self.y_1 = y
-                self.img = self.img_0.copy()
-                # cv.rectangle(img, (x_0, y_0), (x_1, y_1), self.color, -1)
-                cv.line(self.img, (self.x_0, self.y_0), (self.x_0, self.y_1), self.color, 1)
-                cv.line(self.img, (self.x_0, self.y_1), (self.x_1, self.y_1), self.color, 1)
-                cv.line(self.img, (self.x_1, self.y_1), (self.x_1, self.y_0), self.color, 1)
-                cv.line(self.img, (self.x_1, self.y_0), (self.x_0, self.y_0), self.color, 1)
+            if self.mode == 1:
+                if self.click_down_ed:
+                    self.x_1 = x
+                    self.y_1 = y
+                    self.img = self.img_0.copy()
+                    # cv.rectangle(img, (x_0, y_0), (x_1, y_1), self.color, -1)
+                    cv.line(self.img, (self.x_0, self.y_0), (self.x_0, self.y_1), self.color, 1)
+                    cv.line(self.img, (self.x_0, self.y_1), (self.x_1, self.y_1), self.color, 1)
+                    cv.line(self.img, (self.x_1, self.y_1), (self.x_1, self.y_0), self.color, 1)
+                    cv.line(self.img, (self.x_1, self.y_0), (self.x_0, self.y_0), self.color, 1)
             else:
                 self.img = self.img_0.copy()
                 cv.line(self.img, (x-5, y), (x+5,y), self.color, 1)
                 cv.line(self.img, (x, y-5), (x,y+5), self.color, 1)
+                if self.mode == 2:# and not self.click_down_ed:
+                    self.draw_line(x, y)
         elif event == cv.EVENT_LBUTTONUP:
+            self.click_down_ed = False
             if self.mode == 1:
-                self.click_down_ed = False
                 if self.x_0 == x or self.y_0 == y:
                     self.img = self.img_0.copy()
                 else:
                     self.img_0 = self.img
-                    box = self.formBox(((self.x_0, self.y_0), (self.x_1, self.y_1)))
-                    self.collection.append(box)
-                    
+                box = self.formBox(((self.x_0, self.y_0), (self.x_1, self.y_1)))
+                self.collection.append(box)
+            if self.mode == 2:
+                self.img = self.img_0.copy()
+                if self.collection:
+                    self.draw_line(x, y, draw_close=False)
+                self.collection.append((x, y))
+                self.img_0 = self.img
+                self.x_0 = x
+                self.y_0 = y
+
+    def draw_line(self, x, y, draw_close=True):
+        if self.collection:
+            cv.line(self.img, self.collection[-1], (x,y), self.color, 1)
+            if draw_close:
+                cv.line(self.img, self.collection[0], (x,y), self.color, 1)
+    
     def formBox(self, box):
         x = np.array((box[0][0], box[1][0]))
         y = np.array((box[0][1], box[1][1]))
@@ -92,5 +112,5 @@ if __name__ == '__main__':
     #         break
     # cv.destroyAllWindows()
     img = np.ones((500, 500, 3), np.uint8)*255
-    c = CaptureUtils(img, 1)
-    print(c.startCapture('q'))
+    c = CaptureUtils(img, 2)
+    print(c('q'))
