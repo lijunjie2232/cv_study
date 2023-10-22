@@ -1,0 +1,3 @@
+[submodule "advanced/template-matching-ocr"]
+	path = advanced/template-matching-ocr
+	url = https://github.com/NLGRF/template-matching-ocr.git
